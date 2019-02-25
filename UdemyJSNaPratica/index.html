@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html ng-app="meuModulo">
+<head>
+	<meta charset="utf-8">
+	<title>Angular JS</title>
+	<!--Let browser know website is optimized for mobile-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+	<!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+
+
+</head>
+<body ng-controller="indexController">
+	<header class="container">
+		<h2 ng-bind="titulo"></h2>
+	</header>
+
+	<main class="container">
+		<div class="row">
+			<input ng-model="busca" ng-model="busca" type="text" placeholder="Busca">
+			{{busca}}
+		</div>
+		<table class="striped">
+			<thead>
+				<tr>
+					<th>Nome</th>
+					<th>Email</th>
+					<th>Nota1</th>
+					<th>Nota2</th>
+					<th>Nota3</th>
+					<th>Média</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="aluno in alunos | filter:busca">
+					<td>{{aluno.nome}}</td>
+					<td>{{aluno.email}}</td>
+					<td>{{aluno.nota1}}</td>
+					<td>{{aluno.nota2}}</td>
+					<td>{{aluno.nota3}}</td>
+					<td>{{media(aluno)}}</td>
+				</tr>	
+			</tbody>
+		</table>
+	</main>
+
+
+<script type="text/javascript" src="lib/angular/angular.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+<script type="text/javascript">
+	angular.module("meuModulo", []).controller("indexController", function($scope){
+		$scope.titulo = "Sistema com Angular JS";
+		$scope.alunos = [
+			{nome: "Camila", email: "Camila@email.com", nota1: 65, nota2: 85, nota3: 55},
+			{nome: "Pedro", email: "Pedro@email.com", nota1: 75, nota2: 60, nota3: 55},
+			{nome: "Murilo", email: "Murilo@email.com", nota1: 85, nota2: 85, nota3: 55},
+			{nome: "João", email: "João@email.com", nota1: 55, nota2: 60, nota3: 55},
+			{nome: "Ana", email: "Ana@email.com", nota1: 75, nota2: 80, nota3: 55},
+		];
+
+		$scope.media = function(Aluno){
+			var media = (Aluno.nota1 + Aluno.nota2 + Aluno.nota3)/3;
+			//return media.toFixed(2);
+			return media;
+		};
+	})
+</script>
+</body>
+</html>
