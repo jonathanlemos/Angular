@@ -11,162 +11,22 @@
 
 
 </head>
-<body ng-controller="indexController">
-
+<body>
+<!-- <header>
 	<div class="row">
 		<header class="container">
 			<h2 ng-bind="titulo"></h2>
 		</header>
 	</div>
-	<main class="container">
-		<div class="row">
-			<input ng-model="busca" ng-model="busca" type="text" placeholder="Busca">
-		</div>
-		<div class="row">
-			<table class="striped">
-				<thead>
-					<tr>
-						<th>Nome</th>
-						<th>Email</th>
-						<th>Nota1</th>
-						<th>Nota2</th>
-						<th>Nota3</th>
-						<th>Média</th>
-						<th>Ação</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr ng-repeat="aluno in alunos | filter:busca">
-						<td>{{aluno.nome}}</td>
-						<td>{{aluno.email}}</td>
-						<td>{{aluno.nota1}}</td>
-						<td>{{aluno.nota2}}</td>
-						<td>{{aluno.nota3}}</td>
-						<td>{{aluno.media}}</td>
-						<td><button class="btn blue" ng-click="editarAluno(aluno)">Editar</button></td>
-						<td><button class="btn red" ng-click="deletarAluno(aluno)">Deletar</button></td>
-					</tr>	
-				</tbody>
-			</table>
-		</div>
-		<div class="row">
-			<a ng-click="abreAddAluno()" class="waves-effect waves-light btn">Adicionar</a>
-		</div>
-	</main>
-
-<!-- Modal Structure -->
-<div id="modal1" class="modal modal-fixed-footer">
-	<div class="modal-content">
-	  	<h4 ng-if="!editando">Adicionar aluno</h4>
-	  	<h4 ng-if="editando">Editar aluno</h4>
-	  	<p>preencha os dados do aluno</p>
-		<div class="row">
-	  		<div class="input-field col m6 s12">
-	      		<input type="text" placeholder="Nome" ng-model="Aluno.nome" class="validate">
-	    	</div>	    	
-		  	<div class="input-field col m6 s12">
-	          	<input type="text" placeholder="E-mail" ng-model="Aluno.email" class="validate">
-	        </div>
-		  	<div class="input-field col m4 s6">
-	          	<input type="text" placeholder="Nota1" ng-model="Aluno.nota1" class="validate">
-	        </div>
-		  	<div class="input-field col m4 s6">
-	          	<input type="text" placeholder="Nota2" ng-model="Aluno.nota2" class="validate">
-	        </div>
-		  	<div class="input-field col m4 s6">
-	          	<input type="text" placeholder="Nota3" ng-model="Aluno.nota3" class="validate">
-	        </div>  	  
-		</div>
-	</div>
-	<div class="modal-footer">
-		<a ng-if="!editando" ng-click="addAluno(Aluno)" class="waves-effect waves-light blue btn">Adicionar</a>
-		<a ng-if="editando" ng-click="SalvarAluno(Aluno)" class="waves-effect waves-light blue btn">Salvar</a>
-	  	<a href="#!" class="modal-close waves-effect waves-green btn-flat">Cancelar</a>	  
-	</div>
-</div>
+</header> -->
+<div ng-view ></div>
 
 
 
-<script type="text/javascript" src="lib/angular/angular.min.js"></script>
+<script src="lib/angular/angular.min.js"></script>
+<script src="lib/angular/angular-route.min.js"></script>
+<script src="js/app/app.js" ></script>
+<script src="js/app/controllers.js" ></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-<script type="text/javascript">
-	document.addEventListener('DOMContentLoaded', function() {
-    	let elems = document.querySelectorAll('.modal');
-    	let options = "";
-    	let instances = M.Modal.init(elems, options);
-  	});
-
-	angular.module("meuModulo", []).controller("indexController", function($scope){
-
-		$scope.titulo = "Sistema com Angular JS";
-		$scope.alunos = [
-			{nome: "Camila", email: "Camila@email.com", nota1: 65, nota2: 85, nota3: 55},
-			{nome: "Pedro", email: "Pedro@email.com", nota1: 75, nota2: 60, nota3: 55},
-			{nome: "Murilo", email: "Murilo@email.com", nota1: 85, nota2: 85, nota3: 55},
-			{nome: "João", email: "João@email.com", nota1: 55, nota2: 60, nota3: 55},
-			{nome: "Ana", email: "Ana@email.com", nota1: 75, nota2: 80, nota3: 55},
-		];
-
-		var init = function(){
-			$scope.alunos.forEach(function(aluno){
-				aluno.media = media(aluno);
-			});
-			limpaForm();
-		};
-
-		var contar = 0;
-		var media = function(Aluno){
-			console.log(contar++);
-			var media = (parseFloat(Aluno.nota1) + parseFloat(Aluno.nota2) + parseFloat(Aluno.nota3))/3;
-			return media.toFixed(2);
-		};
-
-		$scope.abreAddAluno = function(){
-			$scope.editando = false;
-			M.Modal.getInstance(document.getElementById('modal1')).open();
-			limpaForm();
-		};
-
-		$scope.addAluno = function(Aluno){			
-			Aluno.media = media(Aluno);
-			$scope.alunos.push(Aluno);			
-			M.Modal.getInstance(document.getElementById('modal1')).close();
-		};
-
-		var alunoEditar;
-		$scope.editando = false;
-		$scope.editarAluno = function(Aluno){
-			angular.copy(Aluno, $scope.Aluno);
-			alunoEditar = Aluno;
-			$scope.editando = true;
-			M.Modal.getInstance(document.getElementById('modal1')).open();
-		};
-
-		$scope.deletarAluno = function(Aluno){
-			for(var index in $scope.alunos){
-				var aux = $scope.alunos[index];
-				if(aux === Aluno){
-					$scope.alunos.splice(index, 1);
-				}
-			}
-		};
-
-		var limpaForm = function(){
-			$scope.Aluno = {nome: '', email: '', nota1: '', nota2: '', nota3: '', media: ''};
-		};
-
-		$scope.SalvarAluno = function(Aluno){
-			alunoEditar.nome = Aluno.nome;
-			alunoEditar.email = Aluno.email;
-			alunoEditar.nota1 = Aluno.nota1;
-			alunoEditar.nota2 = Aluno.nota2;
-			alunoEditar.nota3 = Aluno.nota3;
-			alunoEditar.media = media(Aluno);
-			M.Modal.getInstance(document.getElementById('modal1')).close();
-		};
-
-		init();
-	});
-</script>
 </body>
 </html>
